@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * 评论和点赞相关接口控制器
  */
@@ -20,28 +22,36 @@ public class CommentController {
 
     /**
      * 发表评论
-     *
-     * @param comment 评论信息 (streamId, userId, nickname, content)
-     * @return 创建的评论
+     * 兼容前端发送的格式：{contentId, text, user, avatar}
      */
     @PostMapping("/api/comment")
-    public ApiResponse<Comment> createComment(@RequestBody Comment comment) {
-        log.info("POST /api/comment - 发表评论: streamId={}, userId={}, nickname={}",
-                comment.getStreamId(), comment.getUserId(), comment.getNickname());
+    public ApiResponse<Comment> createComment(@RequestBody Map<String, String> request) {
+        log.info("POST /api/comment - 发表评论: {}", request);
+
+        // 获取参数，兼容两种格式
+        String contentId = request.get("contentId");
+        String text = request.get("text");
+        String user = request.get("user");
+        String avatar = request.get("avatar");
 
         // 参数校验
-        if (comment.getStreamId() == null) {
-            throw new IllegalArgumentException("streamId不能为空");
+        if (contentId == null || contentId.trim().isEmpty()) {
+            throw new IllegalArgumentException("contentId不能为空");
         }
-        if (comment.getUserId() == null) {
-            throw new IllegalArgumentException("userId不能为空");
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("text不能为空");
         }
-        if (comment.getNickname() == null || comment.getNickname().trim().isEmpty()) {
-            throw new IllegalArgumentException("nickname不能为空");
+
+        // 构建Comment对象
+        Comment comment = new Comment();
+        try {
+            comment.setStreamId(Long.parseLong(contentId));
+        } catch (NumberFormatException e) {
+            comment.setStreamId(1L); // 默认值
         }
-        if (comment.getContent() == null || comment.getContent().trim().isEmpty()) {
-            throw new IllegalArgumentException("content不能为空");
-        }
+        comment.setNickname(user != null ? user : "匿名用户");
+        comment.setContent(text);
+        comment.setCreatedAt(java.time.LocalDateTime.now());
 
         Comment createdComment = mockDataGenerator.createComment(comment);
         return ApiResponse.success("评论成功", createdComment);

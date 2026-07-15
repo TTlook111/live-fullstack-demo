@@ -31,18 +31,24 @@ public class AdminController {
      * @return 直播间状态信息
      */
     @GetMapping("/api/admin/live/status")
-    public ApiResponse<LiveStatus> getLiveStatus(@RequestParam Long streamId) {
+    public ApiResponse<LiveStatus> getLiveStatus(@RequestParam(required = false) Long streamId) {
         log.info("GET /api/admin/live/status - 获取直播间状态: streamId={}", streamId);
 
-        return mockDataGenerator.getStreamById(streamId)
+        // 如果没有传streamId，使用默认值
+        if (streamId == null) {
+            streamId = 1L; // 默认直播间ID
+        }
+
+        final Long finalStreamId = streamId;
+        return mockDataGenerator.getStreamById(finalStreamId)
                 .map(stream -> {
                     // 统计评论数
-                    long commentCount = mockDataGenerator.getCommentsByStreamId(streamId).size();
+                    long commentCount = mockDataGenerator.getCommentsByStreamId(finalStreamId).size();
                     // 统计投票数
                     long voteCount = mockDataGenerator.getAllVotes().size();
 
                     LiveStatus status = new LiveStatus();
-                    status.setStreamId(streamId);
+                    status.setStreamId(finalStreamId);
                     status.setStatus(stream.getStatus());
                     status.setViewerCount(stream.getViewerCount());
                     status.setCommentCount((int) commentCount);
@@ -60,10 +66,16 @@ public class AdminController {
      * @return 仪表盘数据
      */
     @GetMapping("/api/admin/dashboard")
-    public ApiResponse<Dashboard> getDashboard(@RequestParam Long streamId) {
+    public ApiResponse<Dashboard> getDashboard(@RequestParam(required = false) Long streamId) {
         log.info("GET /api/admin/dashboard - 获取仪表盘数据: streamId={}", streamId);
 
-        return mockDataGenerator.getDashboardByStreamId(streamId)
+        // 如果没有传streamId，使用默认值
+        if (streamId == null) {
+            streamId = 1L; // 默认直播间ID
+        }
+
+        final Long finalStreamId = streamId;
+        return mockDataGenerator.getDashboardByStreamId(finalStreamId)
                 .map(ApiResponse::success)
                 .orElse(ApiResponse.error(404, "仪表盘数据不存在"));
     }
