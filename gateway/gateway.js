@@ -1471,40 +1471,7 @@ app.get('/api/admin/statistics/daily', (req, res) => {
     }
 });
 
-// 添加请求日志中间件（调试用）
-app.use((req, res, next) => {
-	if (req.path.startsWith('/api')) {
-		console.log(`📥 API请求: ${req.method} ${req.path}`);
-	}
-	next();
-});
-
-// 静态文件服务（提供静态资源，如需要）
-// 注意：uni-app 小程序项目通常不需要在服务器提供前端静态文件
-// 如果需要提供构建后的静态文件，可以取消注释并配置正确路径
-// app.use(express.static(path.join(__dirname, 'dist')));
-
-// 404处理器（API 路由）
-app.use((req, res) => {
-	// 如果是 API 请求，返回 JSON 格式错误
-	if (req.path.startsWith('/api')) {
-		console.log(`⚠️  API路由未找到: ${req.method} ${req.path}`);
-		res.status(404).json({
-			success: false,
-			error: 'Not Found',
-			path: req.path,
-			message: `API路由 ${req.path} 未定义`
-		});
-	} else {
-		// 其他请求返回 404
-		console.log(`⚠️  路由未找到: ${req.method} ${req.url}`);
-		res.status(404).json({
-			error: 'Not Found',
-			path: req.url,
-			message: `路由 ${req.url} 未定义`
-		});
-	}
-});
+// [MOVED] 请求日志中间件和404处理器已移至文件末尾（所有路由定义之后）
 
 
 // 模拟数据
@@ -1732,6 +1699,51 @@ app.get('/api/votes', (req, res) => {
 app.get('/api/debate-topic', (req, res) => {
     try {
         // 确保返回的辩题信息包含 id 字段
+        res.json({
+            success: true,
+            data: {
+                id: debateTopic.id,
+                title: debateTopic.title,
+                description: debateTopic.description
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "获取辩题时出错: " + error.message
+        });
+    }
+});
+
+// v1: 获取当前票数（兼容新版本前端）
+app.get('/api/v1/votes', (req, res) => {
+    try {
+        const totalVotes = currentVotes.leftVotes + currentVotes.rightVotes;
+        res.json({
+            success: true,
+            data: {
+                leftVotes: currentVotes.leftVotes,
+                rightVotes: currentVotes.rightVotes,
+                totalVotes: totalVotes,
+                leftPercentage: totalVotes > 0
+                    ? Math.round((currentVotes.leftVotes / totalVotes) * 100)
+                    : 50,
+                rightPercentage: totalVotes > 0
+                    ? Math.round((currentVotes.rightVotes / totalVotes) * 100)
+                    : 50
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "获取票数时出错: " + error.message
+        });
+    }
+});
+
+// v1: 获取辩题信息（兼容新版本前端）
+app.get('/api/v1/debate-topic', (req, res) => {
+    try {
         res.json({
             success: true,
             data: {
@@ -3290,6 +3302,36 @@ app.delete('/api/admin/streams/:id', (req, res) => {
 		res.status(500).json({
 			success: false,
 			message: '删除直播流失败: ' + error.message
+		});
+	}
+});
+
+// ==================== 请求日志中间件（必须在所有路由之后） ====================
+app.use((req, res, next) => {
+	if (req.path.startsWith('/api')) {
+		console.log(`📥 API请求: ${req.method} ${req.path}`);
+	}
+	next();
+});
+
+// 404处理器（API 路由）—— 必须在所有路由定义之后
+app.use((req, res) => {
+	// 如果是 API 请求，返回 JSON 格式错误
+	if (req.path.startsWith('/api')) {
+		console.log(`⚠️  API路由未找到: ${req.method} ${req.path}`);
+		res.status(404).json({
+			success: false,
+			error: 'Not Found',
+			path: req.path,
+			message: `API路由 ${req.path} 未定义`
+		});
+	} else {
+		// 其他请求返回 404
+		console.log(`⚠️  路由未找到: ${req.method} ${req.url}`);
+		res.status(404).json({
+			error: 'Not Found',
+			path: req.url,
+			message: `路由 ${req.url} 未定义`
 		});
 	}
 });
