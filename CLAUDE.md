@@ -10,9 +10,10 @@
 
 ### 后端（开发中）
 - **语言**: Java 17
-- **框架**: Spring Boot 3.x
+- **框架**: Spring Boot 4.1.0
 - **构建工具**: Maven 3.9.16
 - **数据方案**: Mock数据（假数据，不使用数据库）
+- **项目位置**: `/backend/LiveFullstack/`
 
 ### 前端（已下载）
 - **框架**: Vue.js 3 + uni-app
