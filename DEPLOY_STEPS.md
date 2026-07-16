@@ -40,12 +40,22 @@
 
 **第一步：创建 Railway 项目**
 
-1. 登录 Railway，点击 "New Project" -> "Deploy from GitHub Repo"
-2. 选择仓库，指定根目录为 `backend/LiveFullstack`
+1. 登录 Railway（https://railway.app）
+2. 点击右上角 "New Project" 按钮
+3. 选择 "Empty Project" 创建空项目
+4. 进入项目后，点击 "New" -> "GitHub Repo"
+5. 连接你的 GitHub 账号
+6. 选择仓库 `TTlook111/live-fullstack-demo`
+7. 在 "Root Directory" 中输入 `backend/LiveFullstack`
+8. 点击 "Deploy Now"
 
 **第二步：配置构建**
 
-Railway 会自动检测 `pom.xml` 并使用 Maven 构建。确认以下环境变量：
+Railway 会自动检测 `pom.xml` 并使用 Maven 构建。
+
+添加环境变量：
+1. 点击服务卡片上的 "Variables" 标签
+2. 添加以下环境变量：
 
 ```env
 # Railway 自动设置 PORT，Spring Boot 需要读取
@@ -53,23 +63,29 @@ PORT=8000
 JAVA_VERSION=17
 ```
 
-**第三步：添加 Procfile 或启动命令**
+**第三步：配置启动命令**
 
-在 `backend/LiveFullstack/` 目录下创建 `Procfile`：
-
-```
-web: java -jar target/LiveFullstack-0.0.1-SNAPSHOT.jar --server.port=${PORT:-8000}
-```
-
-或者在 Railway 的 Settings -> Deploy -> Start Command 中设置：
+1. 点击服务卡片上的 "Settings" 标签
+2. 找到 "Deploy" 部分
+3. 在 "Start Command" 中输入：
 
 ```
 java -jar target/LiveFullstack-0.0.1-SNAPSHOT.jar --server.port=${PORT}
 ```
 
+或者在 `backend/LiveFullstack/` 目录下创建 `Procfile` 文件：
+
+```
+web: java -jar target/LiveFullstack-0.0.1-SNAPSHOT.jar --server.port=${PORT:-8000}
+```
+
 **第四步：记录 Backend 部署 URL**
 
-部署成功后，Railway 会分配一个 URL，如：
+部署成功后：
+1. 点击服务卡片上的 "Settings" 标签
+2. 找到 "Networking" 部分
+3. 点击 "Generate Domain" 生成公网域名
+4. 记录生成的 URL，如：
 ```
 https://live-fullstack-backend.up.railway.app
 ```
@@ -78,7 +94,11 @@ https://live-fullstack-backend.up.railway.app
 
 **第一步：新建 Railway Service**
 
-在同一个 Railway 项目中，点击 "New" -> "GitHub Repo"，指定根目录为 `gateway/`
+1. 在同一个 Railway 项目中
+2. 点击 "New" -> "GitHub Repo"
+3. 选择同一个仓库 `TTlook111/live-fullstack-demo`
+4. 在 "Root Directory" 中输入 `gateway`
+5. 点击 "Deploy Now"
 
 **第二步：配置环境变量**
 
@@ -120,19 +140,7 @@ const REAL_WECHAT_CONFIG = {
 
 ### 1.4 部署 Frontend（uni-app H5）到 Vercel
 
-**第一步：构建 H5 版本**
-
-在本地执行：
-
-```bash
-cd frontend
-npm install
-npm run build:h5
-```
-
-构建产物在 `frontend/dist/build/h5/` 目录。
-
-**第二步：修改 API 地址**
+**第一步：修改 API 地址**
 
 编辑 `frontend/config/server-mode.js`，将 `API_BASE_URL` 改为 Gateway 的线上地址：
 
@@ -141,31 +149,24 @@ export const API_BASE_URL = 'https://live-fullstack-gateway.up.railway.app';
 export const MIDDLEWARE_SERVER_URL = 'https://live-fullstack-gateway.up.railway.app';
 ```
 
-重新构建：
+**第二步：部署到 Vercel**
 
-```bash
-npm run build:h5
+1. 登录 Vercel（https://vercel.com）
+2. 点击 "Add New" -> "Project"
+3. 导入 GitHub 仓库 `TTlook111/live-fullstack-demo`
+4. 配置项目：
+   - **Framework Preset**: `Other`
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build:h5`
+   - **Output Directory**: `dist/build/h5`
+5. 点击 "Deploy"
+
+**第三步：记录 Frontend URL**
+
+部署成功后，Vercel 会分配一个域名，如：
 ```
-
-**第三步：部署到 Vercel**
-
-方式一（CLI）：
-
-```bash
-npm i -g vercel
-cd frontend/dist/build/h5
-vercel --prod
+https://live-fullstack-demo.vercel.app
 ```
-
-方式二（网页操作）：
-
-1. 登录 Vercel，点击 "New Project"
-2. 导入 GitHub 仓库
-3. 配置：
-   - Framework Preset: `Other`
-   - Root Directory: `frontend/dist/build/h5`
-   - Build Command: 留空（已预构建）
-   - Output Directory: `.`
 
 **第四步：配置自定义域名（可选）**
 
