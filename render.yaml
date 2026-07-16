@@ -1,16 +1,12 @@
-# Render 部署配置 - 前端静态站点
 services:
-  # 前端 - 使用 Static Site
   - type: web
     name: live-fullstack-frontend
     runtime: node
     region: oregon
     plan: free
-    buildCommand: cd frontend && npm install && npm run build:h5
-    startCommand: cd frontend && node server.js
+    buildCommand: cd frontend && npm install --include=dev && npm run build:h5
+    startCommand: cd frontend && npm start
     envVars:
       - key: USE_MOCK
         value: "true"
-      - key: NODE_ENV
-        value: production
     autoDeploy: true

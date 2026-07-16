@@ -11,7 +11,8 @@
     "dev:h5": "node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js -p h5",
     "build:h5": "node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js build -p h5",
     "dev:mp-weixin": "node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js -p mp-weixin",
-    "build:mp-weixin": "node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js build -p mp-weixin"
+    "build:mp-weixin": "uni build -p mp-weixin",
+    "postinstall": "echo 'Dependencies installed'"
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.1.0",
