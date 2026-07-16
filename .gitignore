@@ -106,7 +106,6 @@ htmlcov/
 # 包含密钥的配置文件（测试项目用）
 frontend/config/server-mode.js
 frontend/config/server-mode.node.js
-gateway/config/server-mode.node.js
 
 # ==================== 依赖锁定文件（可选）====================
 # 如果你想忽略 package-lock.json 取消下面的注释
