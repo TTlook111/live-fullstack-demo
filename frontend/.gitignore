@@ -8,12 +8,14 @@ yarn-debug.log*
 yarn-error.log*
 
 # 目录和打包产物
-/dist/
 /build/
 /unpackage/
 /.temp/
 .cache/
 coverage/
+
+# 允许提交dist目录（用于部署）
+!/dist/
 
 # 编译输出
 *.tsbuildinfo
