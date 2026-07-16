@@ -58,7 +58,30 @@
 
 ### 1.2 部署 Backend（Spring Boot）到 Render
 
-**第一步：创建 Render Web Service**
+> 注意：Render 免费tier 不直接支持 Java，需要使用 Docker 部署。
+
+**第一步：创建 Dockerfile**
+
+在 `backend/LiveFullstack/` 目录下创建 `Dockerfile` 文件：
+
+```dockerfile
+# 使用 OpenJDK 17 镜像
+FROM openjdk:17-jdk-slim
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制 jar 文件
+COPY target/LiveFullstack-0.0.1-SNAPSHOT.jar app.jar
+
+# 暴露端口
+EXPOSE 8000
+
+# 启动应用
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+**第二步：创建 Render Web Service**
 
 1. 登录 Render（https://render.com）
 2. 点击左上角 "New" -> "Web Service"
@@ -67,7 +90,7 @@
    - 选择 `TTlook111/live-fullstack-demo`
    - 点击 "Connect"
 
-**第二步：配置服务**
+**第三步：配置服务**
 
 填写以下配置：
 
@@ -77,30 +100,28 @@
 | **Region** | 选择离你最近的区域（如 Singapore） |
 | **Branch** | `main` |
 | **Root Directory** | `backend/LiveFullstack` |
-| **Runtime** | `Java` |
-| **Build Command** | `mvn clean package -DskipTests` |
-| **Start Command** | `java -jar target/LiveFullstack-0.0.1-SNAPSHOT.jar` |
+| **Runtime** | `Docker` |
+| **Dockerfile Path** | `./Dockerfile` |
 | **Instance Type** | `Free` |
 
-**第三步：添加环境变量**
+**第四步：添加环境变量**
 
 点击 "Environment" 标签，添加以下环境变量：
 
 ```
 PORT = 8000
-JAVA_VERSION = 17
 ```
 
-**第四步：创建并部署**
+**第五步：创建并部署**
 
 1. 点击 "Create Web Service"
-2. 等待构建和部署完成（约3-5分钟）
+2. 等待构建和部署完成（约5-10分钟）
 3. 部署成功后，记录分配的 URL：
    ```
    https://live-fullstack-backend.onrender.com
    ```
 
-**第五步：验证后端服务**
+**第六步：验证后端服务**
 
 访问后端地址，测试接口：
 ```bash
