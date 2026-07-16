@@ -7,8 +7,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# 目录和打包产物
-/dist/
+# 目录和打包产物（保留 dist 用于 Render 部署）
 /build/
 /unpackage/
 /.temp/
