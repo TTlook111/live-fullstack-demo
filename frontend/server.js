@@ -202,8 +202,11 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 提供前端静态资源
-app.use(express.static(__dirname));
+// 提供前端静态资源（必须在所有其他路由之前）
+app.use(express.static(__dirname, {
+	index: 'index.html',
+	extensions: ['js', 'css', 'html', 'json', 'vue', 'png', 'jpg', 'gif', 'svg']
+}));
 // ==================== 后台管理路由结束 ====================
 
 // ==================== 优先代理到后端服务器（如果启用） ====================
