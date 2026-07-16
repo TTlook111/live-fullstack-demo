@@ -233,15 +233,25 @@
 			// #endif
 			
 			// #ifndef MP-WEIXIN
-			// H5或其他环境：无法获取真实微信 code，提示用户
-			console.error('⚠️  当前不在微信小程序环境，无法获取真实的微信登录 code')
-			
-			this.isLoading = false
-			uni.showToast({
-				title: '微信登录功能仅在微信小程序环境中可用，请在微信小程序中打开此应用',
-				icon: 'none',
-				duration: 3000
-			})
+			// H5或其他环境：直接进入应用（不需要微信登录）
+			console.log('✅ H5环境：跳过微信登录，直接进入应用')
+
+			// 保存模拟用户信息
+			const mockUser = {
+				id: 'h5_user_' + Date.now(),
+				nickName: 'H5用户' + Math.floor(Math.random() * 1000),
+				avatarUrl: '/static/logo.png'
+			}
+			uni.setStorageSync('currentUser', mockUser)
+			uni.setStorageSync('authToken', 'mock_token_' + Date.now())
+
+			// 跳转到直播选择页
+			setTimeout(() => {
+				this.isLoading = false
+				uni.redirectTo({
+					url: '/pages/live-select/live-select'
+				})
+			}, 500)
 			// #endif
 				
 			} catch (error) {

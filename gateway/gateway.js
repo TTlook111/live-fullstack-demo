@@ -3091,14 +3091,14 @@ function generatePlayUrls(stream) {
 app.get('/api/admin/streams', (req, res) => {
 	try {
 		const streams = db.streams.getAll();
-		
+
 		// 为每个流添加直播状态和播放地址
 		const streamsWithStatus = streams.map(stream => {
 			const status = streamLiveStatuses[stream.id] || { isLive: false };
-			
+
 			// 生成播放地址（playUrls）
 			const playUrls = generatePlayUrls(stream);
-			
+
 			return {
 				...stream,
 				// ✅ 新增：播放地址字段
@@ -3112,7 +3112,7 @@ app.get('/api/admin/streams', (req, res) => {
 				}
 			};
 		});
-		
+
 		res.json({
 			success: true,
 			data: {
@@ -3121,7 +3121,47 @@ app.get('/api/admin/streams', (req, res) => {
 			},
 			timestamp: Date.now()
 		});
-		
+
+	} catch (error) {
+		console.error('获取直播流列表失败:', error);
+		res.status(500).json({
+			success: false,
+			message: '获取直播流列表失败: ' + error.message
+		});
+	}
+});
+
+// v1版本：获取直播流列表（兼容前端 v1 API）
+app.get('/api/v1/admin/streams', (req, res) => {
+	try {
+		const streams = db.streams.getAll();
+
+		const streamsWithStatus = streams.map(stream => {
+			const status = streamLiveStatuses[stream.id] || { isLive: false };
+			const playUrls = generatePlayUrls(stream);
+
+			return {
+				...stream,
+				playUrls: playUrls,
+				liveStatus: {
+					isLive: status.isLive || false,
+					liveId: status.liveId || null,
+					startTime: status.startTime || null,
+					stopTime: status.stopTime || null,
+					streamUrl: status.streamUrl || stream.url
+				}
+			};
+		});
+
+		res.json({
+			success: true,
+			data: {
+				streams: streamsWithStatus,
+				total: streams.length
+			},
+			timestamp: Date.now()
+		});
+
 	} catch (error) {
 		console.error('获取直播流列表失败:', error);
 		res.status(500).json({
