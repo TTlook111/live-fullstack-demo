@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直播辩论系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .status {
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .stats h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 头部 -->
+            <div class="header">
+                <h1>🎬 直播辩论系统</h1>
+                <div class="status">✅ 服务运行中</div>
+            </div>
+
+            <!-- 功能卡片 -->
+            <div class="cards">
+                <div class="card">
+                    <h3>📊 数据概览</h3>
+                    <p>查看直播数据、用户统计、投票情况等实时数据。</p>
+                    <a href="/admin" class="btn">进入后台</a>
+                </div>
+
+                <div class="card">
+                    <h3>🗳️ 投票系统</h3>
+                    <p>支持实时投票、票数统计、投票分布展示。</p>
+                    <a href="https://live-fullstack-backend.onrender.com/api/v1/votes?stream_id=1" class="btn btn-success" target="_blank">查看投票</a>
+                </div>
+
+                <div class="card">
+                    <h3>💬 评论系统</h3>
+                    <p>支持评论发布、点赞、删除等互动功能。</p>
+                    <a href="https://live-fullstack-backend.onrender.com/api/v1/ai-content?stream_id=1" class="btn btn-warning" target="_blank">查看AI内容</a>
+                </div>
+
+                <div class="card">
+                    <h3>📺 直播管理</h3>
+                    <p>直播状态监控、直播流管理、直播控制。</p>
+                    <a href="https://live-fullstack-backend.onrender.com/api/v1/admin/streams" class="btn" target="_blank">查看直播流</a>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 辩题管理</h3>
+                    <p>辩题创建、编辑、状态管理。</p>
+                    <a href="https://live-fullstack-backend.onrender.com/api/v1/debate-topic?stream_id=1" class="btn btn-success" target="_blank">查看辩题</a>
+                </div>
+
+                <div class="card">
+                    <h3>🤖 AI内容</h3>
+                    <p>AI识别内容管理、内容审核。</p>
+                    <a href="https://live-fullstack-backend.onrender.com/api/admin/live/status" class="btn btn-warning" target="_blank">查看直播状态</a>
+                </div>
+            </div>
+
+            <!-- 统计数据 -->
+            <div class="stats">
+                <h3>📈 服务状态</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ backendStatus }}</div>
+                        <div class="stat-label">后端服务</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ gatewayStatus }}</div>
+                        <div class="stat-label">网关服务</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ frontendStatus }}</div>
+                        <div class="stat-label">前端服务</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">月费用</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 页脚 -->
+            <div class="footer">
+                <p>直播辩论系统 - 全栈应用演示 | 使用 Spring Boot + Node.js + Vue.js 构建</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        createApp({
+            setup() {
+                const backendStatus = ref('检查中...');
+                const gatewayStatus = ref('检查中...');
+                const frontendStatus = ref('✅ 正常');
+
+                const checkBackend = async () => {
+                    try {
+                        const response = await fetch('https://live-fullstack-backend.onrender.com/api/admin/live/status');
+                        if (response.ok) {
+                            backendStatus.value = '✅ 正常';
+                        } else {
+                            backendStatus.value = '❌ 异常';
+                        }
+                    } catch (error) {
+                        backendStatus.value = '❌ 异常';
+                    }
+                };
+
+                const checkGateway = async () => {
+                    try {
+                        const response = await fetch('https://live-fullstack-gateway.onrender.com/api/admin/dashboard');
+                        if (response.ok) {
+                            gatewayStatus.value = '✅ 正常';
+                        } else {
+                            gatewayStatus.value = '❌ 异常';
+                        }
+                    } catch (error) {
+                        gatewayStatus.value = '❌ 异常';
+                    }
+                };
+
+                onMounted(() => {
+                    checkBackend();
+                    checkGateway();
+                });
+
+                return {
+                    backendStatus,
+                    gatewayStatus,
+                    frontendStatus
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
