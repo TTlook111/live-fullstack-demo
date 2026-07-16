@@ -18,16 +18,18 @@ const REAL_WECHAT_CONFIG = {
 const getLocalIP = () => '192.168.31.189';
 const MOCK_SERVER_CONFIG = {
     host: getLocalIP(),
-    port: 8080,
-    url: `http://${getLocalIP()}:8080`
+    port: DEPLOY_PORT, // 使用环境变量 PORT 或默认 8080
+    url: `http://${getLocalIP()}:${DEPLOY_PORT}`
 };
 const getCurrentServerConfig = () => {
+    // 无论哪种模式，都使用 Render 的 PORT 环境变量
+    const port = process.env.PORT || 8080;
     if (USE_MOCK_SERVER) {
         return {
             mode: 'mock',
-            url: MOCK_SERVER_CONFIG.url,
-            host: MOCK_SERVER_CONFIG.host,
-            port: MOCK_SERVER_CONFIG.port,
+            url: `http://localhost:${port}`,
+            host: '0.0.0.0',
+            port: port,
             wechat: {
                 useMock: true,
                 appid: 'wx94289b0d2ca7a802',
@@ -39,7 +41,7 @@ const getCurrentServerConfig = () => {
         return {
             mode: 'real',
             url: REAL_SERVER_URL,
-            port: DEPLOY_PORT,  // 使用部署端口（8082）
+            port: port,
             wechat: {
                 useMock: false,
                 appid: REAL_WECHAT_CONFIG.appid,
