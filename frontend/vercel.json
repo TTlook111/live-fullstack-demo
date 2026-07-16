@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "buildCommand": "npm run build:h5",
-  "outputDirectory": "dist/build/h5",
-  "installCommand": "npm install",
-  "framework": null
-}

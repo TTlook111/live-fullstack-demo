@@ -1,16 +1,16 @@
 // config/server-mode.node.js (Node.js后端专用)
-const USE_MOCK_SERVER = false; // 改为 false 使用真实服务器
+const USE_MOCK_SERVER = process.env.USE_MOCK !== 'false'; // 默认使用 mock模式，设置 USE_MOCK=false 使用真实服务器
 const LOCAL_SERVER_URL = 'http://localhost:8080';
 // 部署服务器配置：使用环境变量或默认端口
-const DEPLOY_PORT = process.env.PORT || 8082; // 部署端口，可通过环境变量覆盖（改为8082）
-const REAL_SERVER_URL = `http://192.140.160.119:${DEPLOY_PORT}`; // 部署服务器地址
+const DEPLOY_PORT = process.env.PORT || 8080; // 部署端口，Render 会自动设置 PORT 环境变量
+const REAL_SERVER_URL = process.env.REAL_SERVER_URL || `http://localhost:${DEPLOY_PORT}`; // 部署服务器地址
 const REAL_SERVER_PORT = DEPLOY_PORT; // 部署服务器端口
 // 后端服务器配置（真正的后端服务器地址）
-const BACKEND_SERVER_URL = 'http://localhost:8081'; // 后端服务器地址
+const BACKEND_SERVER_URL = process.env.BACKEND_SERVER_URL || ''; // 后端服务器地址，通过环境变量配置
 // 是否优先使用后端服务器（设为 true 时，所有 API 请求会优先代理到后端服务器）
 // 注意：后台管理系统通过中间层代理访问后端服务器
-// 🔧 强制使用真实服务器：设为 true，所有 API 请求直接代理到后端服务器，不使用本地mock数据
-const PRIORITIZE_BACKEND_SERVER = false; // 设为 true 优先使用后端服务器，false 优先使用本地路由
+// 🔧 通过环境变量控制：设置 PRIORITIZE_BACKEND=true 时，API请求代理到后端服务器
+const PRIORITIZE_BACKEND_SERVER = process.env.PRIORITIZE_BACKEND === 'true'; // 默认使用本地 mock数据
 const REAL_WECHAT_CONFIG = {
     appid: 'wx94289b0d2ca7a802',
     secret: '10409c1193a326a7b328f675b1776195'

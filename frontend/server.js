@@ -196,43 +196,6 @@ app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // 提供静态资源（图标、动画等）
 app.use('/static', express.static(path.join(__dirname, 'static')));
-
-// 根路径路由 - 返回前端页面
-app.get('/', (req, res) => {
-	// 尝试多个可能的路径
-	const possiblePaths = [
-		path.join(__dirname, 'dist', 'dev', 'h5', 'index.html'),
-		path.join(__dirname, 'dist', 'build', 'h5', 'index.html'),
-		path.join(__dirname, 'public', 'index.html'),
-		path.join(__dirname, 'index.html')
-	];
-
-	for (const filePath of possiblePaths) {
-		if (require('fs').existsSync(filePath)) {
-			return res.sendFile(filePath);
-		}
-	}
-
-	// 如果都不存在，返回默认页面
-	res.send('<h1>前端页面加载中...</h1><p>请访问 <a href="/admin">后台管理</a></p>');
-});
-
-// 提供前端静态资源（必须在所有其他路由之前）
-const possibleStaticPaths = [
-	path.join(__dirname, 'dist', 'dev', 'h5'),
-	path.join(__dirname, 'dist', 'build', 'h5'),
-	path.join(__dirname, 'public')
-];
-
-for (const staticPath of possibleStaticPaths) {
-	if (require('fs').existsSync(staticPath)) {
-		app.use(express.static(staticPath, {
-			index: 'index.html',
-			extensions: ['js', 'css', 'html', 'json', 'vue', 'png', 'jpg', 'gif', 'svg']
-		}));
-		break;
-	}
-}
 // ==================== 后台管理路由结束 ====================
 
 // ==================== 优先代理到后端服务器（如果启用） ====================
@@ -3656,6 +3619,25 @@ if (BACKEND_SERVER_URL && !PRIORITIZE_BACKEND_SERVER) {
 } else {
 	console.log('⚠️  后端代理未配置（BACKEND_SERVER_URL 或 PRIORITIZE_BACKEND_SERVER 不满足条件）');
 }
+
+// ==================== 前端静态文件服务 ====================
+// 提供 uni-app H5 构建后的静态文件
+const h5DistPath = path.join(__dirname, 'dist', 'build', 'h5');
+app.use(express.static(h5DistPath));
+
+// 所有非 API 请求返回前端 index.html（支持 SPA路由）
+app.get('*', (req, res, next) => {
+	// 如果是 API 请求，跳过
+	if (req.path.startsWith('/api')) {
+		return next();
+	}
+	// 返回前端 index.html
+	res.sendFile(path.join(h5DistPath, 'index.html'), (err) => {
+		if (err) {
+			next(err);
+		}
+	});
+});
 
 // ==================== 404处理器（必须在所有路由之后） ====================
 // 404处理器（API 路由）
