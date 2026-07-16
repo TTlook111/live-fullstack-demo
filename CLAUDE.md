@@ -8,34 +8,61 @@
 
 ## 🛠️ 技术栈
 
-### 后端（开发中）
+### 后端（已部署）
 - **语言**: Java 17
 - **框架**: Spring Boot 4.1.0
 - **构建工具**: Maven 3.9.16
 - **数据方案**: Mock数据（假数据，不使用数据库）
 - **项目位置**: `/backend/LiveFullstack/`
+- **部署地址**: https://live-fullstack-backend.onrender.com
 
-### 前端（已下载）
-- **框架**: Vue.js 3 + uni-app
+### 前端（已部署）
+- **框架**: Vue.js 3 + uni-app (H5版本)
 - **位置**: `/frontend/`
+- **部署地址**: https://live-fullstack-frontend.onrender.com
 
-### 网关（已下载）
+### 网关（已部署）
 - **框架**: Node.js + Express
 - **位置**: `/gateway/`
-- **端口**: 8080
+- **部署地址**: https://live-fullstack-gateway.onrender.com
 
 ## 📁 项目结构
 
 ```
 live-fullstack-demo/
-├── frontend/              # 前端项目（Vue3 + uni-app）
-├── gateway/               # 网关项目（Node.js + Express，端口8080）
-├── backend/               # 后端项目（Spring Boot，端口8081）
-├── .gitignore             # Git忽略配置
+├── frontend/              # 前端项目（Vue3 + uni-app H5）
+│   ├── dist/build/h5/     # 预构建的H5产物
+│   ├── pages/             # 页面组件
+│   ├── utils/             # 工具函数
+│   └── config/            # 配置文件
+├── gateway/               # 网关项目（Node.js + Express）
+│   ├── gateway.js         # 主入口
+│   └── admin/             # 管理后台数据
+├── backend/               # 后端项目（Spring Boot）
+│   └── LiveFullstack/
+│       └── src/main/java/com/LiveFullstack/
+│           ├── controller/  # 控制器
+│           ├── model/       # 数据模型
+│           ├── service/     # 服务层
+│           └── util/        # 工具类
+├── .gitignore
 ├── CLAUDE.md              # 本文件
-├── README.md              # 项目说明（待创建）
+├── README.md              # 项目说明文档
 └── 测试题目.md            # 测试题目要求
 ```
+
+## 🚀 部署信息
+
+### 服务地址
+| 服务 | 地址 | 说明 |
+|------|------|------|
+| 前端 | https://live-fullstack-frontend.onrender.com | H5版本，可直接访问 |
+| 网关 | https://live-fullstack-gateway.onrender.com | API网关 |
+| 后端 | https://live-fullstack-backend.onrender.com | Java后端服务 |
+
+### 环境变量配置
+- **USE_MOCK=true**: 使用Mock数据模式
+- **BACKEND_SERVER_URL**: 后端服务地址（网关配置）
 
 ## 🔧 开发环境配置
 
@@ -47,33 +74,14 @@ live-fullstack-demo/
 ### Maven环境
 - **Maven版本**: 3.9.16
 - **Maven路径**: `D:\tool\apache-maven-3.9.16`
-- **Maven命令**: 使用 `mvn` 或 `mvn.cmd`
-- **本地仓库**: `~/.m2/repository/`
-- **MAVEN_HOME**: `D:\tool\apache-maven-3.9.16`
 
-### Node.js环境（用于网关和前端）
+### Node.js环境
 - **Node.js版本**: 22.22.2
 - **npm版本**: 10.9.7
 
-### Git配置
-- **用户名**: muyou
-- **邮箱**: 2725077832@qq.com
-
-### IDE环境
-- **IntelliJ IDEA**: 2023.2 (位于 `D:/tool/IntelliJIdea2023.2/`)
-- **DataGrip**: 2024.1 (位于 `D:/tool/DataGrip2024.1/`)
-
-### 常用工具
-- **Git**: `D:\git\Git\cmd\git.exe`
-- **SSH**: `D:\git\Git\usr\bin\ssh.exe`
-- **curl**: 系统自带
-- **Docker**: `C:\Program Files\Docker\Docker\resources\bin\docker.exe`
-- **kubectl**: `C:\Program Files\Docker\Docker\resources\bin\kubectl.exe`
-
 ### 端口配置
-- **前端**: 由uni-app开发工具管理
-- **网关**: 8080端口
-- **后端**: 8081端口
+- **网关**: 8080端口（本地开发）
+- **后端**: 8081端口（本地开发）
 
 ## 🎯 核心需求
 
