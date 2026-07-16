@@ -41,7 +41,8 @@
     "babel-plugin-import": "^1.13.8",
     "cross-env": "^10.1.0",
     "nodemon": "^3.0.1",
-    "vue-template-compiler": "^2.7.16"
+    "vue-template-compiler": "^2.7.16",
+    "@dcloudio/vue-cli-plugin-uni": "^2.0.2-4070620250821001"
   },
   "keywords": [
     "debate",
