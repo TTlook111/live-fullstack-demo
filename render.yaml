@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: live-debate-frontend
+    runtime: node
+    region: oregon  # 或者选择 frankfurt (欧洲) / singapore (亚洲)
+    plan: free      # 免费套餐
+    buildCommand: npm install && npm run build:h5
+    startCommand: npm start
+    envVars:
+      - key: USE_MOCK
+        value: "true"
+      - key: NODE_ENV
+        value: production
+    # 自动部署（推送到 main 分支时自动部署）
+    autoDeploy: true
