@@ -622,7 +622,7 @@ public class ApiResponse<T> {
 #### 学习与求职目标
 
 - 深耕 **Java 后端** 与 **AI Agent 开发** 两个方向
-- 目标岗位：Java 后端开发 / AI 智能体开发，倾向上海地区
+- 目标岗位：Java 后端开发 / AI 智能体开发
 - 持续深入：分布式架构、LangGraph 高级机制、RAG 工程化落地、SQL 安全治理
 
 ### 本项目贡献
