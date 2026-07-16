@@ -595,30 +595,44 @@ public class ApiResponse<T> {
 
 ## 👤 个人介绍
 
-我是一名**后端开发工程师**，专注于 Java 生态系统和微服务架构。
+### 技术背景简介
 
-### 技术栈
+#### 主语言与核心栈
 
-- **主语言**: Java, JavaScript/TypeScript
-- **后端框架**: Spring Boot, Spring Cloud
-- **前端基础**: Vue.js, React
-- **数据库**: MySQL, Redis, MongoDB
-- **DevOps**: Docker, Kubernetes, CI/CD
+- **主力语言**: Java 17，熟练 Spring Boot / Spring Cloud Alibaba 微服务生态
+- **辅助语言**: Python（用于 LLM Agent 开发），前端能写 Vue 3 + TypeScript 基础页面
 
-### 项目经验
+#### 擅长方向
 
-在本次项目中，我负责：
+**Java 后端工程化**
+- 政企安全运营平台项目经验
+- 擅长接口性能优化、通用抽象封装、批量导入链路设计
 
-1. ✅ **后端API开发** - 实现完整的Mock数据接口
-2. ✅ **格式适配** - 确保API返回格式与前端期望一致
-3. ✅ **网关配置** - 添加v1路由别名，解决前后端通信问题
-4. ✅ **部署上线** - 使用Render平台完成全栈部署
+**Agent / LLM 应用开发**
+- DataOcean 项目核心开发
+- 基于 LangGraph 编排 NL2SQL 全链路（Query Rewrite → Schema RAG → SQL 生成 → 安全沙箱 → 可视化）
+- 熟悉 RAG 检索增强、SSE 流式输出、sqlglot AST 安全校验
 
-### 学习目标
+**数据与中间件**
+- MySQL 索引 / 事务优化
+- Redis 缓存策略
+- Kafka/Doris 大数据组件
+- GaussDB 国产化适配
 
-- 深入学习微服务架构设计
-- 掌握云原生应用开发
-- 提升系统设计和架构能力
+#### 学习与求职目标
+
+- 深耕 **Java 后端** 与 **AI Agent 开发** 两个方向
+- 目标岗位：Java 后端开发 / AI 智能体开发，倾向上海地区
+- 持续深入：分布式架构、LangGraph 高级机制、RAG 工程化落地、SQL 安全治理
+
+### 本项目贡献
+
+在 Live Debate 项目中，我负责：
+
+1. ✅ **后端API开发** - 基于 Spring Boot 实现完整的 Mock 数据接口
+2. ✅ **格式适配** - 确保 API 返回格式与前端期望一致
+3. ✅ **网关配置** - 添加 v1 路由别名，解决前后端通信问题
+4. ✅ **部署上线** - 使用 Render 平台完成全栈部署
 
 ---
 
