@@ -1,15 +1,16 @@
+# Render 部署配置 - 前端静态站点
 services:
+  # 前端 - 使用 Static Site
   - type: web
-    name: live-debate-frontend
+    name: live-fullstack-frontend
     runtime: node
-    region: oregon  # 或者选择 frankfurt (欧洲) / singapore (亚洲)
-    plan: free      # 免费套餐
-    buildCommand: npm install && npm run build:h5
-    startCommand: npm start
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build:h5
+    startCommand: cd frontend && node server.js
     envVars:
       - key: USE_MOCK
         value: "true"
       - key: NODE_ENV
         value: production
-    # 自动部署（推送到 main 分支时自动部署）
     autoDeploy: true

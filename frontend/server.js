@@ -3623,47 +3623,20 @@ if (BACKEND_SERVER_URL && !PRIORITIZE_BACKEND_SERVER) {
 // ==================== 前端静态文件服务 ====================
 // 提供 uni-app H5 构建后的静态文件
 const h5DistPath = path.join(__dirname, 'dist', 'build', 'h5');
-console.log('📂 静态文件目录:', h5DistPath);
-console.log('📂 __dirname:', __dirname);
-
-// 先检查目录是否存在
 const fs = require('fs');
+
+// 检查目录是否存在
 if (fs.existsSync(h5DistPath)) {
 	console.log('✅ H5 构建目录存在');
-	// 列出目录内容
-	const files = fs.readdirSync(h5DistPath);
-	console.log('📁 目录内容:', files);
-} else {
-	console.error('❌ H5 构建目录不存在:', h5DistPath);
-	// 尝试其他可能的路径
-	const altPaths = [
-		path.join(__dirname, 'src', 'dist', 'build', 'h5'),
-		path.join('/opt/render', 'dist', 'build', 'h5'),
-	];
-	for (const altPath of altPaths) {
-		if (fs.existsSync(altPath)) {
-			console.log('✅ 找到备用路径:', altPath);
-			break;
-		}
-	}
-}
-
-app.use(express.static(h5DistPath));
-
-// 所有非 API 请求返回前端 index.html（支持 SPA路由）
-app.get('*', (req, res, next) => {
-	// 如果是 API 请求，跳过
-	if (req.path.startsWith('/api')) {
-		return next();
-	}
-	// 返回前端 index.html
-	res.sendFile(path.join(h5DistPath, 'index.html'), (err) => {
-		if (err) {
-			console.error('❌ 发送 index.html 失败:', err);
-			next(err);
-		}
+	app.use(express.static(h5DistPath));
+	// SPA 路由支持
+	app.get('*', (req, res, next) => {
+		if (req.path.startsWith('/api')) return next();
+		res.sendFile(path.join(h5DistPath, 'index.html'));
 	});
-});
+} else {
+	console.log('⚠️  H5 构建目录不存在，跳过静态文件服务');
+}
 
 // ==================== 404处理器（必须在所有路由之后） ====================
 // 404处理器（API 路由）
