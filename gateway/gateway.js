@@ -2887,6 +2887,37 @@ app.get('/api/admin/dashboard', (req, res) => {
 	}
 });
 
+// v1版本：获取数据概览（兼容前端 v1 API）
+app.get('/api/v1/admin/dashboard', (req, res) => {
+	// 直接复用 /api/admin/dashboard 的逻辑
+	req.url = '/api/admin/dashboard';
+	app.handle(req, res);
+});
+
+// v1版本：投票统计
+app.get('/api/v1/admin/votes/statistics', (req, res) => {
+	req.url = '/api/admin/votes/statistics';
+	app.handle(req, res);
+});
+
+// v1版本：用户投票
+app.post('/api/v1/user-vote', (req, res) => {
+	req.url = '/api/user-vote';
+	app.handle(req, res);
+});
+
+// v1版本：用户投票记录
+app.get('/api/v1/user-votes', (req, res) => {
+	req.url = '/api/user-votes';
+	app.handle(req, res);
+});
+
+// v1版本：AI内容
+app.get('/api/v1/ai-content', (req, res) => {
+	req.url = '/api/ai-content';
+	app.handle(req, res);
+});
+
 // 3.2 用户列表
 app.get('/api/admin/miniprogram/users', (req, res) => {
 	try {
