@@ -18,10 +18,7 @@ ENV UNI_CLI_CONTEXT=/app
 ENV NODE_ENV=production
 
 # 构建H5版本
-RUN npm run build:h5 || echo "Build failed, continuing..."
-
-# 检查构建结果
-RUN ls -la dist/dev/h5/ || echo "Build directory not found"
+RUN npm run build:h5
 
 # 暴露端口
 EXPOSE 8080
