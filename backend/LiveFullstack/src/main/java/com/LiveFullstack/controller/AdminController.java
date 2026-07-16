@@ -66,7 +66,7 @@ public class AdminController {
      * @return 仪表盘数据
      */
     @GetMapping("/api/admin/dashboard")
-    public ApiResponse<Dashboard> getDashboard(@RequestParam(required = false) Long streamId) {
+    public ApiResponse<Map<String, Object>> getDashboard(@RequestParam(required = false) Long streamId) {
         log.info("GET /api/admin/dashboard - 获取仪表盘数据: streamId={}", streamId);
 
         // 如果没有传streamId，使用默认值
@@ -75,9 +75,24 @@ public class AdminController {
         }
 
         final Long finalStreamId = streamId;
-        return mockDataGenerator.getDashboardByStreamId(finalStreamId)
-                .map(ApiResponse::success)
-                .orElse(ApiResponse.error(404, "仪表盘数据不存在"));
+
+        // 获取流信息
+        Stream stream = mockDataGenerator.getStreamById(finalStreamId).orElse(null);
+
+        // 获取仪表盘数据
+        Dashboard dashboard = mockDataGenerator.getDashboardByStreamId(finalStreamId).orElse(null);
+
+        // 转换为前端期望的格式
+        Map<String, Object> result = new HashMap<>();
+        result.put("isLive", "live".equals(stream != null ? stream.getStatus() : "offline"));
+        result.put("liveStreamUrl", stream != null ? stream.getStreamKey() : null);
+        result.put("totalUsers", dashboard != null ? dashboard.getTotalViewers() : 0);
+        result.put("activeUsers", dashboard != null ? dashboard.getPeakViewers() : 0);
+        result.put("totalVotes", dashboard != null ? dashboard.getTotalVotes() : 0);
+        result.put("totalComments", dashboard != null ? dashboard.getTotalComments() : 0);
+        result.put("streamId", finalStreamId);
+
+        return ApiResponse.success(result);
     }
 
     /**
@@ -127,7 +142,7 @@ public class AdminController {
      * @return 直播间列表
      */
     @GetMapping("/api/v1/admin/streams")
-    public ApiResponse<List<Stream>> getAdminStreams(
+    public ApiResponse<Map<String, Object>> getAdminStreams(
             @RequestParam(required = false) String status) {
         log.info("GET /api/v1/admin/streams - 获取直播间列表: status={}", status);
 
@@ -137,7 +152,13 @@ public class AdminController {
         } else {
             streams = mockDataGenerator.getAllStreams();
         }
-        return ApiResponse.success(streams);
+
+        // 转换为前端期望的格式: { streams: [...], total: number }
+        Map<String, Object> result = new HashMap<>();
+        result.put("streams", streams);
+        result.put("total", streams.size());
+
+        return ApiResponse.success(result);
     }
 
     /**

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,30 +23,64 @@ public class VoteController {
     private final MockDataGenerator mockDataGenerator;
 
     /**
-     * 获取所有投票记录 (v1版本)
+     * 获取投票统计（前端期望格式）
+     * 返回 leftVotes 和 rightVotes 的统计数量
      */
     @GetMapping("/api/v1/votes")
-    public ApiResponse<List<Vote>> getVotesV1() {
-        log.info("GET /api/v1/votes - 获取所有投票记录");
-        List<Vote> votes = mockDataGenerator.getAllVotes();
-        return ApiResponse.success(votes);
+    public ApiResponse<Map<String, Object>> getVotesV1(@RequestParam(required = false) String stream_id) {
+        log.info("GET /api/v1/votes - 获取投票统计: stream_id={}", stream_id);
+        return ApiResponse.success(getVoteStatistics(stream_id));
     }
 
     /**
-     * 获取所有投票记录
+     * 获取投票统计（前端期望格式）
      */
     @GetMapping("/api/votes")
-    public ApiResponse<List<Vote>> getVotes() {
-        log.info("GET /api/votes - 获取所有投票记录");
-        List<Vote> votes = mockDataGenerator.getAllVotes();
-        return ApiResponse.success(votes);
+    public ApiResponse<Map<String, Object>> getVotes(@RequestParam(required = false) String stream_id) {
+        log.info("GET /api/votes - 获取投票统计: stream_id={}", stream_id);
+        return ApiResponse.success(getVoteStatistics(stream_id));
+    }
+
+    /**
+     * 计算投票统计数据
+     * 前端期望: { leftVotes: number, rightVotes: number, totalVotes: number, leftPercentage: number, rightPercentage: number }
+     */
+    private Map<String, Object> getVoteStatistics(String streamId) {
+        List<Vote> allVotes = mockDataGenerator.getAllVotes();
+
+        // 统计各选项的票数
+        long leftVotes = allVotes.stream()
+                .filter(v -> "Java".equals(v.getOption()) || "left".equals(v.getOption()) || "REST".equals(v.getOption()))
+                .count();
+        long rightVotes = allVotes.stream()
+                .filter(v -> "Go".equals(v.getOption()) || "right".equals(v.getOption()) || "GraphQL".equals(v.getOption()))
+                .count();
+
+        // 如果没有匹配的数据，使用默认值（模拟数据）
+        if (leftVotes == 0 && rightVotes == 0) {
+            leftVotes = 65;
+            rightVotes = 45;
+        }
+
+        long totalVotes = leftVotes + rightVotes;
+        int leftPercentage = totalVotes > 0 ? (int) Math.round((leftVotes * 100.0) / totalVotes) : 50;
+        int rightPercentage = totalVotes > 0 ? 100 - leftPercentage : 50;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("leftVotes", leftVotes);
+        result.put("rightVotes", rightVotes);
+        result.put("totalVotes", totalVotes);
+        result.put("leftPercentage", leftPercentage);
+        result.put("rightPercentage", rightPercentage);
+
+        return result;
     }
 
     /**
      * 用户投票
      */
     @PostMapping("/api/v1/user-vote")
-    public ApiResponse<Vote> createUserVote(@RequestBody UserVoteRequest request) {
+    public ApiResponse<Map<String, Object>> createUserVote(@RequestBody UserVoteRequest request) {
         log.info("POST /api/v1/user-vote - 用户投票: topicId={}, userId={}, option={}",
                 request.getTopicId(), request.getUserId(), request.getOption());
 
@@ -65,27 +100,21 @@ public class VoteController {
         vote.setUserId(request.getUserId());
         vote.setOption(request.getOption());
 
-        Vote createdVote = mockDataGenerator.createVote(vote);
-        return ApiResponse.success("投票成功", createdVote);
+        mockDataGenerator.createVote(vote);
+
+        // 返回更新后的投票统计
+        return ApiResponse.success("投票成功", getVoteStatistics(null));
     }
 
     /**
      * 获取用户投票记录
-     * 支持按topicId查询投票统计
      */
     @GetMapping("/api/v1/user-votes")
     public ApiResponse<?> getUserVotes(@RequestParam(required = false) Long topicId,
                                        @RequestParam(required = false) Long userId) {
         log.info("GET /api/v1/user-votes - 查询投票记录: topicId={}, userId={}", topicId, userId);
 
-        if (topicId != null) {
-            // 返回指定话题的投票统计
-            Map<String, Long> voteStats = mockDataGenerator.getVoteStatsByTopicId(topicId);
-            return ApiResponse.success(voteStats);
-        }
-
-        // 返回所有投票记录
-        List<Vote> votes = mockDataGenerator.getAllVotes();
-        return ApiResponse.success(votes);
+        // 返回投票统计
+        return ApiResponse.success(getVoteStatistics(null));
     }
 }
