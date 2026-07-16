@@ -13,6 +13,9 @@ RUN npm install --legacy-peer-deps
 # 复制源代码
 COPY . .
 
+# 构建H5版本
+RUN npm run build:h5
+
 # 暴露端口
 EXPOSE 8080
 
