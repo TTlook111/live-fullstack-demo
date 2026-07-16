@@ -13,11 +13,8 @@ RUN npm install --legacy-peer-deps
 # 复制源代码
 COPY . .
 
-# 构建H5版本
-RUN npm run build:h5
-
 # 暴露端口
 EXPOSE 8080
 
-# 启动应用
+# 启动应用（直接运行Node.js服务器）
 CMD ["npm", "start"]
