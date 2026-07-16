@@ -356,43 +356,43 @@
 				</view>
 			</view>
 		</view>
-	</view>
 
-	<!-- 自定义评论弹窗 -->
-	<view class="comment-modal-overlay" v-if="showCommentModal" @click="closeCommentModal">
-		<view class="comment-modal" @click.stop>
-			<view class="comment-modal-header">
-				<text class="comment-modal-title">发表评论</text>
-				<view class="comment-close-btn" @click="closeCommentModal">
-					<text class="comment-close-icon">✕</text>
-				</view>
-			</view>
-			
-			<view class="comment-modal-content">
-				<view class="comment-input-container">
-					<textarea 
-						class="comment-textarea"
-						v-model="commentText"
-						:placeholder="commentPlaceholder"
-						:maxlength="200"
-						:auto-focus="true"
-						:show-confirm-bar="false"
-						@input="onCommentInput"
-						@focus="onCommentFocus"
-						@blur="onCommentBlur"
-					></textarea>
-					<view class="comment-char-count">
-						<text class="char-count-text">{{ commentText.length }}/200</text>
+		<!-- 自定义评论弹窗 -->
+		<view class="comment-modal-overlay" v-if="showCommentModal" @click="closeCommentModal">
+			<view class="comment-modal" @click.stop>
+				<view class="comment-modal-header">
+					<text class="comment-modal-title">发表评论</text>
+					<view class="comment-close-btn" @click="closeCommentModal">
+						<text class="comment-close-icon">✕</text>
 					</view>
 				</view>
-			</view>
-			
-			<view class="comment-modal-footer">
-				<view class="comment-footer-btn comment-cancel-btn" @click="closeCommentModal">
-					<text class="comment-btn-text">取消</text>
+
+				<view class="comment-modal-content">
+					<view class="comment-input-container">
+						<textarea
+							class="comment-textarea"
+							v-model="commentText"
+							:placeholder="commentPlaceholder"
+							:maxlength="200"
+							:auto-focus="true"
+							:show-confirm-bar="false"
+							@input="onCommentInput"
+							@focus="onCommentFocus"
+							@blur="onCommentBlur"
+						></textarea>
+						<view class="comment-char-count">
+							<text class="char-count-text">{{ commentText.length }}/200</text>
+						</view>
+					</view>
 				</view>
-				<view class="comment-footer-btn comment-confirm-btn" @click="submitComment" :class="{ 'disabled': !commentText.trim() }">
-					<text class="comment-btn-text">确定</text>
+
+				<view class="comment-modal-footer">
+					<view class="comment-footer-btn comment-cancel-btn" @click="closeCommentModal">
+						<text class="comment-btn-text">取消</text>
+					</view>
+					<view class="comment-footer-btn comment-confirm-btn" @click="submitComment" :class="{ 'disabled': !commentText.trim() }">
+						<text class="comment-btn-text">确定</text>
+					</view>
 				</view>
 			</view>
 		</view>
