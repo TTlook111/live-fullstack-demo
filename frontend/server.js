@@ -196,6 +196,14 @@ app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // 提供静态资源（图标、动画等）
 app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// 根路径路由 - 返回前端页面
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 提供前端静态资源
+app.use(express.static(__dirname));
 // ==================== 后台管理路由结束 ====================
 
 // ==================== 优先代理到后端服务器（如果启用） ====================
