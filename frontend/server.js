@@ -199,11 +199,11 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // 根路径路由 - 返回前端页面
 app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'index.html'));
+	res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 提供前端静态资源（必须在所有其他路由之前）
-app.use(express.static(__dirname, {
+app.use(express.static(path.join(__dirname, 'public'), {
 	index: 'index.html',
 	extensions: ['js', 'css', 'html', 'json', 'vue', 'png', 'jpg', 'gif', 'svg']
 }));
