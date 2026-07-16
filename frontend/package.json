@@ -9,10 +9,9 @@
     "swagger": "node swagger-server.js",
     "swagger:dev": "nodemon swagger-server.js",
     "dev:h5": "cross-env UNI_INPUT_DIR=./src node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js -p h5",
-    "build:h5": "cross-env UNI_INPUT_DIR=./src node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js build -p h5",
+    "build:h5": "echo 'Using pre-built dist'",
     "dev:mp-weixin": "cross-env UNI_INPUT_DIR=./src node node_modules/@dcloudio/vite-plugin-uni/bin/uni.js -p mp-weixin",
-    "build:mp-weixin": "uni build -p mp-weixin",
-    "postinstall": "echo 'Dependencies installed'"
+    "build:mp-weixin": "uni build -p mp-weixin"
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.1.0",

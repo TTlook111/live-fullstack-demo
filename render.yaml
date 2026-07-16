@@ -4,7 +4,7 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: cd frontend && npm install --include=dev && npm run build:h5
+    buildCommand: cd frontend && npm install
     startCommand: cd frontend && npm start
     envVars:
       - key: USE_MOCK
