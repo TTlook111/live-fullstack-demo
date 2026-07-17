@@ -246,14 +246,14 @@ app.get('/api/admin/users/:id', (req, res) => {
 
 // 添加直播状态控制 API
 let globalLiveStatus = {
-	isLive: false,
-	streamUrl: null,
+	isLive: true,  // Mock数据默认直播开启
+	streamUrl: 'http://192.168.31.249:8086/live/stream.m3u8',
 	scheduledStartTime: null,
 	scheduledEndTime: null,
-	streamId: null,
+	streamId: 'stream-001',
 	isScheduled: false,
 	liveId: null,
-	startTime: null
+	startTime: new Date().toISOString()
 };
 
 // 每个流的独立直播状态（支持多流同时管理）
